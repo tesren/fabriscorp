@@ -3,6 +3,10 @@
  * Fabris Corp functions and definitions
 */
 
+date_default_timezone_set('America/Mexico_City');
+
+require_once("vendor/autoload.php");
+
 if ( ! function_exists( 'fabris_theme_support' ) ) :
 
 	/**
@@ -47,6 +51,7 @@ add_action( 'after_setup_theme', 'fabris_theme_support' );
 */
 
 require get_template_directory().'/inc/listing-cpt.php';
+require get_template_directory().'/inc/sales-team-cpt.php';
 //require get_template_directory().'/inc/region-cpt.php';
 require get_template_directory().'/inc/messages-cpt.php';
 require get_template_directory().'/inc/reviews-cpt.php';
@@ -98,6 +103,42 @@ function get_property_type($postID, $taxonomy){
 		}
 	}
 }
+
+
+//variables que conozco
+/* 
+    LIST_48 = Pies cuadrados
+    LIST_35 = Nombre de la propiedad
+    LIST_15 = Estatus
+    LIST_22 = Precio de lista USD
+    LIST_39 = Ciudad
+    LIST_40 = Estado
+    LIST_78 = Descripción
+    LIST_96 = Amueblado
+    LIST_88 = Vista Principal
+    LIST_113 = Parking
+    LIST_130 = Colonia
+    LIST_46 = Latitud
+    LIST_47 Longitud
+    LIST_3 = MLS ID
+    LIST_29 = Region
+ */
+
+function get_rets_listings(){
+    $config = new \PHRETS\Configuration;
+    $config->setLoginUrl('http://retsgw.flexmls.com/rets2_3/Login')
+            ->setUsername('pvr.rets.fabriscorp')
+            ->setPassword('aG(0KSslEi');
+
+    $rets = new \PHRETS\Session($config);
+
+    $connect = $rets->Login();
+
+    $results = $rets->Search('Property', 'A', '*', ['Limit' => 2]);
+    
+    return $results->toArray();
+}
+
 
 function fabris_set_strings_transtaltion(){
         

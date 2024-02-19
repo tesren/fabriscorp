@@ -17,7 +17,7 @@
 
             <ul class="fs-7">
                 <li class="mb-2">
-                    <a href="<?= get_template_directory_uri().'/assets/pdf/Aviso-de-Privacidad-FabrisCorp.pdf' ?>" class="link-light text-decoration-none" target="_blank" rel="noopener noreferrer">
+                    <a href="<?= get_the_permalink( get_page_by_title( 'AVISO DE PRIVACIDAD') ) ?>" class="link-light text-decoration-none" target="_blank" rel="noopener noreferrer">
                         <?php pll_e('Aviso de Privacidad')?>
                     </a>
                 </li>

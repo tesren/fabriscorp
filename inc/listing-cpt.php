@@ -118,29 +118,20 @@ function listing_register_meta_boxes( $meta_boxes ) {
                 'rows' =>  7,
             ],
             [
-                'name'  => 'Precio',
-                'desc'  => 'Precio de la propiedad',
+                'name'  => 'Precio en pesos (MXN)',
+                'desc'  => 'Precio de la propiedad en pesos mexicanos',
                 'id'    => 'price',
                 'type'  => 'number',
                 'required'=> true,
                 'size' => 30,
             ],
             [
-                'name'            => 'Moneda',
-                'id'              => 'currency',
-                'type'            => 'select',
-                // Array of 'value' => 'Label' pairs
-                'options'         => array(
-                    'USD'       => 'USD',
-                    'MXN'       => 'MXN',
-                ),
-                // Allow to select multiple value?
-                'multiple'        => false,
-                // Placeholder text
-                'placeholder'     => 'Seccione la moneda',
-                // Display "Select All / None" button?
-                'select_all_none' => false,
-                'required'=> true,
+                'name'  => 'Precio en dólares (USD)',
+                'desc'  => 'Precio de la propiedad en dólares',
+                'id'    => 'price_usd',
+                'type'  => 'number',
+                'required'=> false,
+                'size' => 30,
             ],
             [
                     'name'       => 'Tipo propiedad',
