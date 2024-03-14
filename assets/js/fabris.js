@@ -20,5 +20,17 @@ if(testimonials){
   testimonials.mount();
 }
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+
+zone_select = document.getElementById("zona");
+
+if(zone_select){
+  NiceSelect.bind(zone_select, {
+    searchable: true, 
+    placeholder: 'Cualquier Zona', 
+    searchtext: 'Buscar...', 
+    selectedtext: 'Seleccionado'
+  });
+}

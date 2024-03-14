@@ -39,7 +39,8 @@ get_header();
         <h2 class="text-center text-lg-start mb-4 fs-5 px-3"><?php pll_e('Llene el formulario y nos comunicaremos con usted lo más pronto posible') ?></h2>
 
         <?php 
-            if( pll_current_language() == 'es'){
+            $lang = 'es';
+            if( $lang == 'es'){
                 echo do_shortcode( '[cf7form cf7key="formulario-de-contacto"]' );
             }
             else{

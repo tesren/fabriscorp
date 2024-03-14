@@ -6,18 +6,18 @@
                 
             <?php while( have_posts() ): the_post();?>
 
-                <?php $images = rwmb_meta('listing_gallery', ['size'=>'large', 'limit'=>40]);?>
+                <?php $images = get_gallery_urls( rwmb_meta('mls_id') );?>
 
                 <div class="row mb-6">
 
                     <div class="col-12 px-0 position-relative">
-                        <img src="<?= $images[0]['url'] ?>" alt="<?= $images[0]['title'] ?>" class="w-100 z-1" style="height:37vh; object-fit:cover;" data-fancybox="gallery">
+                        <img src="<?= $images[0] ?>" alt="<?= get_the_title() ?>" class="w-100 z-1" style="height:37vh; object-fit:cover;" data-fancybox="gallery">
                         <div class="fondo-oscuro z-2"></div>
 
                         <div class="position-absolute top-0 start-0 h-100 w-100 z-3 d-flex justify-content-center">
                             <div class="text-center text-white mb-1 align-self-center">
                                 <h1 class="fs-2 fw-bold"><?= get_the_title(); ?></h1>
-                                <h2 class="fs-5 fw-light mb-4"><?php get_list_terms(get_the_ID(), 'regiones'); ?></h2>
+                                <h2 class="fs-5 fw-light mb-4"><?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?></h2>
                                 <a href="#gallery-1" class="btn btn-outline-light rounded-0"><?php pll_e('Ver Galería') ?></a>
                             </div>
                         </div>
@@ -25,21 +25,21 @@
                     </div>
 
                     <div class="col-6 col-lg-4 p-0 d-none d-lg-block">
-                        <img src="<?= $images[1]['url'] ?>" alt="<?= $images[1]['title'] ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
+                        <img src="<?= $images[1] ?>" alt="<?= get_the_title(); ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
                     </div>
 
                     <div class="col-6 col-lg-4 p-0 d-none d-lg-block">
-                        <img src="<?= $images[2]['url'] ?>" alt="<?= $images[2]['title'] ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
+                        <img src="<?= $images[2] ?>" alt="<?= get_the_title(); ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
                     </div>
 
                     <div class="col-6 col-lg-4 p-0 d-none d-lg-block">
-                        <img src="<?= $images[3]['url'] ?>" alt="<?= $images[3]['title'] ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
+                        <img src="<?= $images[3] ?>" alt="<?= get_the_title(); ?>" class="w-100" style="height:50vh; object-fit:cover;" data-fancybox="gallery">
                     </div>
 
 
 
                     <?php for($i=4; $i<count($images); $i++): ?>
-                        <img src="<?= $images[$i]['url'] ?>" alt="<?= $images[$i]['title'] ?>" class="d-none" data-fancybox="gallery">
+                        <img src="<?= $images[$i] ?>" alt="<?= get_the_title(); ?>" class="d-none" data-fancybox="gallery">
                     <?php endfor; ?>
 
                 </div>
@@ -48,9 +48,9 @@
 
                     <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                         <h2>
-                            <div class="text-yellow fs-5 text-uppercase"><?php get_property_type(get_the_ID(), 'property_type') ?></div>
+                            <div class="text-yellow fs-5 text-uppercase"><?php rwmb_the_value('property_type'); ?></div>
                             <div class="fs-2 fw-bold"><?= get_the_title(); ?></div>
-                            <div class="fw-light fs-5"><?php get_list_terms(get_the_ID(), 'regiones'); ?></div>
+                            <div class="fw-light fs-5"><?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?></div>
                         </h2>
                     </div>
 
@@ -60,28 +60,28 @@
 
                             <?php if(rwmb_meta('bedrooms')): ?>
                                 <div class="text-center me-2">
-                                    <div class="fw-normal fs-3"><?= rwmb_meta('bedrooms'); ?> <i class="fa-solid text-yellow fa-bed"></i></div>
+                                    <div class="fw-normal fs-4"><?= rwmb_meta('bedrooms'); ?> <i class="fa-solid text-yellow fa-bed"></i></div>
                                     <div class="text-secondary"><?php pll_e('Recámaras');?></div>
                                 </div>
                             <?php endif; ?>
 
                             <?php if(rwmb_meta('bathrooms')): ?>
                                 <div class="text-center me-2">
-                                    <div class="fw-normal fs-3"><?= rwmb_meta('bathrooms'); ?> <i class="fa-solid text-yellow fa-bath"></i></div>
+                                    <div class="fw-normal fs-4"><?= rwmb_meta('bathrooms'); ?> <i class="fa-solid text-yellow fa-bath"></i></div>
                                     <div class="text-secondary"><?php pll_e('Baños');?></div>
                                 </div>
                             <?php endif; ?>
 
                             <?php if(rwmb_meta('construction')): ?>
                                 <div class="text-center me-2">
-                                    <div class="fw-normal fs-3"><?= rwmb_meta('construction'); ?>m² <i class="fa-solid text-yellow fa-house"></i></div>
+                                    <div class="fw-normal fs-4"><?= rwmb_meta('construction'); ?>m² <i class="fa-solid text-yellow fa-house"></i></div>
                                     <div class="text-secondary"><?php pll_e('Conts. Total');?></div>
                                 </div>
                             <?php endif; ?>
 
                             <?php if(rwmb_meta('lot_area')): ?>
                                 <div class="text-center me-2">
-                                    <div class="fw-normal fs-3"><?= rwmb_meta('lot_area'); ?>m² <i class="fa-solid text-yellow fa-maximize"></i></div>
+                                    <div class="fw-normal"><?= rwmb_meta('lot_area'); ?>m² <i class="fa-solid text-yellow fa-maximize"></i></div>
                                     <div class="text-secondary"><?php pll_e('Lote');?></div>
                                 </div>
                             <?php endif; ?>
@@ -91,17 +91,16 @@
 
                     <!-- Estatus de la propiedad -->
                     <div class="col-12 col-lg-3">
-                        <?php if( rwmb_meta('avaliable') == 'Disponible' ): ?>
+                        <?php if( rwmb_meta('avaliable') == 'Active' ): ?>
 
                             <div class="text-center text-lg-start">
                                 <div class="fs-5 text-success fw-light text-uppercase"><?php pll_e(rwmb_meta('avaliable')) ?></div>
 
                                 <h2 class="fs-3 blue-text fw-bold mb-0">
-                                    <span id="price_mxn">$<?= number_format(rwmb_meta('price')); ?> MXN</span>
-                                    <span id="price_usd" class="d-none">$<?= number_format(rwmb_meta('price_usd')); ?> USD</span>
+                                    <span id="price_usd">$<?= number_format(rwmb_meta('price_usd')); ?> USD</span>
 
-                                    <?php if( rwmb_meta('price_usd') ): ?>
-                                        <img onclick="changeCurrency()" data-bs-toggle="tooltip" data-bs-title="Cambiar Moneda" width="20px" src="<?= get_template_directory_uri()?>/assets/images/change-currency.webp" alt="Change Currency">
+                                    <?php if( rwmb_meta('price') ): ?>
+                                        <span id="price_mxn" class="fs-6">$<?= number_format(rwmb_meta('price')) ?? 0; ?> MXN</span>
                                     <?php endif; ?>
                                 </h2>
 
@@ -112,7 +111,7 @@
 
                             <div class="text-center text-lg-start">
                                 <div class="fs-5 text-warning fw-light text-uppercase"><?php pll_e(rwmb_meta('avaliable')) ?></div>
-                                <h2 class="fs-1 blue-text">$<?= number_format(rwmb_meta('price')); ?> <span class="fs-4"><?= rwmb_meta('currency');?></span></h2>
+                                <h2 class="fs-1 blue-text">$<?= number_format(rwmb_meta('price_usd')); ?> <span class="fs-4">USD</span></h2>
                             </div>
 
                         <?php else: ?>
@@ -131,26 +130,24 @@
                         <hr class="col-12 col-lg-3 mt-0">
 
                         <div class="fs-6 fw-light mb-5">
-                            <?= rwmb_meta('description'); ?>
+                            <?= get_the_content() ?>
                         </div>
 
                         <?php $amenities = rwmb_meta('amenities');?>
 
-                        <!-- Amenidades -->
                         <?php if($amenities): ?>
                             <h3 class="fs-4 text-yellow text-uppercase fw-normal"><?php pll_e('Amenidades');?></h3>
                             <hr class="col-12 col-lg-3 mt-0">
-                            <ul class="fs-6 fw-light">
-                                <?php foreach($amenities as $key => $amenity):?>
-                                    <li><?= $amenity ?></li>
-                                <?php endforeach;?>
-                            </ul>
+                            <p class="fs-5 fw-light">
+                                <?= $amenities ?>
+                            </p>
                         <?php endif; ?>
                     </div>
 
                     <!-- Ubicación -->
                     <div class="col-12 mb-6">
-                        <h4 class="fs-4 text-yellow text-uppercase fw-normal">Ubicación</h4>
+                        <h4 class="fs-4 text-yellow text-uppercase fw-normal mb-1">Ubicación</h4>
+                        <p><?= rwmb_meta('directions') ?></p>
                         <hr class="col-12 col-lg-3 mt-0">
                         <div>
                             <?php
@@ -200,21 +197,11 @@
     </article>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function(){
             Fancybox.bind("[data-fancybox]", {
                 // Your custom options
             });
         });
-
-        function changeCurrency(){
-
-            var priceMXN = document.getElementById('price_mxn');
-            var priceUSD = document.getElementById('price_usd');
-
-            priceMXN.classList.toggle('d-none');
-            priceUSD.classList.toggle('d-none');
-
-        }
     </script>
 
 <?php get_footer(); ?>

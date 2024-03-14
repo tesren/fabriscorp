@@ -1,93 +1,85 @@
 <?php
 
-    $regiones = get_terms( array(
-        'taxonomy'          => 'regiones',
-        'parent'            => 0,
-        'hide_empty'        => false,
-    ) );
-
-    $propertiesType = get_terms( array(
-        'taxonomy'          => 'property_type',
-        'parent'            => 0,
-        'hide_empty'        => false,
-    ) );
-
-    if($_GET['regiones_s'] && !empty($_GET['regiones_s']))
-    {
-        $regiones_s = $_GET['regiones_s'];
-
-    }else{
-        $regiones_s = array(); 
-
-        //Recuerda que si no tiene parent no funciona la busqueda
-        foreach($regiones as &$category):
-            $childrenTerms =  get_term_children( $category->term_id, 'regiones' );
-
-            foreach($childrenTerms as $child) :     
-                $term = get_term_by( 'id', $child, 'regiones');
-                array_push($regiones_s, $term->slug);
-            endforeach; 
-
-         endforeach;
-    }
-
-    if($_GET['type_s'] && !empty($_GET['type_s']))
-    {
-        $pType = $_GET['type_s'];
-    }
-    else{
-        $pType = array();
-
-        foreach ($propertiesType as $propertyType){
-            array_push($pType, $propertyType->slug);
-        } 
-    }
-
-
     get_header();
 
-    $developments = get_posts(array(
-        'post_type' => 'desarrollos',
-        'numberposts' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'property_type',
-                'field'    => 'slug',
-                'terms'    => $pType,
-            ),
-            array(
-                'taxonomy' => 'regiones',
-                'field'    => 'slug',
-                'include_children' => true,
-                'terms'    => $regiones_s,
-            ),
-        ),
-    ));
+    if( isset($_GET['zona']) and !empty($_GET['zona'])){
+        $zone = $_GET['zona'];
+        $zone_query = [
+            'key' => 'community',
+            'value' => $zone,
+            'compare' => 'LIKE'
+        ];
+    }else{
+        $zone_query = [
+            'key' => 'community',
+            'value' => 'Nave Espacial',
+            'compare' => '!='
+        ];
+    }
+
+    if( isset( $_GET['tipo_propiedad'] ) and !empty( $_GET['tipo_propiedad'] ) ){
+        $property_type = $_GET['tipo_propiedad'];
+
+        $property_type_query = [
+            'key' => 'property_type',
+            'value' => $property_type,
+            'compare' => 'LIKE'
+        ];
+
+    }else{
+        $property_type_query = [
+            'key' => 'property_type',
+            'value' => 'Nave Espacial',
+            'compare' => '!='
+        ];
+    }
+
+    if( isset( $_GET['recamaras'] ) and !empty( $_GET['recamaras'] ) ){
+        $bedrooms = $_GET['recamaras'];
+
+        $bedrooms_array_query = [
+            'key' => 'bedrooms',
+            'value' => $bedrooms,
+            'compare' => '='
+        ];
+    }else{
+
+        $bedrooms_array_query = [
+            'key' => 'bedrooms',
+            'value' => 9999,
+            'compare' => '!='
+        ];
+
+    }
 
     
-    $args = array(
+    $min_price = (int) $_GET['min_price'] ?? 0;
+    
+    $max_price = (int) $_GET['max_price'] ?? 99999999;
+    
+
+    //listings exclusivos
+    $properties = get_posts(array(
         'post_type' => 'propiedad-en-venta',
-        'posts_per_page' => 9,
-        'meta_query' => array(
-            array(
-                'key' => 'avaliable',
-                'value' => 'Disponible',
-                'compare' => 'LIKE'
-            ),
-        ),
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'property_type',
-                'field'    => 'slug',
-                'terms'    => $pType,
-            ),
-            array(
-                'taxonomy' => 'regiones',
-                'field'    => 'slug',
-                'include_children' => true,
-                'terms'    => $regiones_s,
-            ),
-        ),
+        'numberposts' => -1,
+    ));
+    
+    //listings de flex
+    $args = array(
+        'post_type' => 'listings',
+        'posts_per_page' => 12,
+        'meta_query' => [
+            $property_type_query,
+            $bedrooms_array_query,
+            $zone_query,
+            [
+                'key' => 'price_usd',
+                'type' => 'NUMERIC',
+                'value' => array($min_price, $max_price),
+                'compare' => 'BETWEEN'
+            ],
+        ],
+        
     );
     
 
@@ -102,72 +94,96 @@
         <h1 class="fs-2 blue-text fw-bold text-center mt-5 mb-1"><?php pll_e('Resultados de la Busqueda');?></h1>
         <hr class="col-10 col-lg-3 mx-auto mt-0 mb-5">
 
-        <div class="row justify-content-evenly">
+        <div class="container mb-5">
+            <?php echo get_search_form();?>
+        </div>
 
-            <div class="col-12 col-lg-8 mb-5">
-                <!-- Formulario de busqueda -->
-                <?php echo get_search_form();?>
-            </div>
+        <div class="container row mb-6">
 
             <?php while($query ->have_posts() ) : $query ->the_post(); ?>
 
-                <div class="col-11 col-lg-10 col-xl-9 mb-4 mb-lg-5 shadow-4 px-0 rounded-2 blog-card">
+                <a href="<?= get_the_permalink() ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
-                    <a href="<?= get_the_permalink(); ?>" class="text-decoration-none">
-                        <div class="card w-100 text-dark fw-normal position-relative">
+                    <div class="shadow-4 rounded-4">
+                        <?php $img = get_portrait_url(rwmb_meta('mls_id')); ?>
 
-                            <div class="badge bg-blue position-absolute top-0 start-0 ms-3 mt-3 z-3">
-                                <?php get_property_type(get_the_ID() , 'property_type') ?>
+                        <img src="<?= $img ?>" alt="<?= get_the_title() ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;">
+
+                        <div class="position-absolute top-0 start-0 mt-2 ms-4">
+                            <div class="position-relative">
+
+                            <?php $price_usd = rwmb_meta('price_usd') ?>
+
+                            <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($price_usd) ?></div>
+
+                            <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                                USD
                             </div>
-
-                            <div class="row g-0">
-
-                                <?php $images = rwmb_meta('listing_gallery', ['size'=>'medium-large', 'limit'=>1]) ;?>
-                                <div class="col-md-4">
-                                    <img src="<?= $images[0]['url'] ?>" class="w-100 rounded-start" alt="<?= get_the_title();?>" style="height:340px; object-fit:cover;">
-                                </div>
-
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h2 class="fw-bold blue-text mb-1"><?= get_the_title();?></h2>
-                                        <h3 class="fw-light gold-text fs-5 mb-3"><?php get_list_terms(get_the_ID(), 'regiones'); ?></h3>
-
-                                        <p class="card-text"><?= get_the_excerpt();?></p>
-
-                                        <div class="d-flex fs-5 my-2">
-                                            <div class="gold-text">
-                                                <img width="24px" src="<?php echo get_template_directory_uri();?>/assets/icons/bed-blue.svg" alt="">
-                                                <?= rwmb_meta('bedrooms'); ?>
-                                            </div>
-
-                                            <div class="gold-text">
-                                                <img width="24px" src="<?php echo get_template_directory_uri();?>/assets/icons/bathtub-blue.svg" alt="" class="ms-3">
-                                                <?= rwmb_meta('bathrooms'); ?>                                    
-                                            </div>
-
-                                            <div class="gold-text ms-3">
-                                                <span class="blue-text"><?= rwmb_meta('construction'); ?></span>m²                                 
-                                            </div>
-                                        </div>
-
-                                        <div class="fs-2 fw-bold blue-text">
-                                            $<?= number_format(rwmb_meta('price')) ?> <span class="fs-5"><?= rwmb_meta('currency') ?></span>
-                                        </div>
-
-                                        <p class="card-text"><small class="text-body-secondary"><?php pll_e('Última actualización');?>: <?= get_the_date('d/m/Y');?></small></p>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
-                    </a>
-                    
-                </div>
+
+                        <?php
+                            $status = rwmb_meta('avaliable');
+
+                            if($status == 'Active'){
+                                $status_classes = 'bg-success';
+                            }elseif( $status == 'Pending' ){
+                                $status_classes = 'bg-warning';
+                            }else{
+                                $status_classes = 'bg-danger';
+                            }
+                        ?>
+
+                        <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
+                            <?= $status ?>
+                        </div>
+
+                        <div class="p-3">
+                            <div class="fs-7 text-secondary fw-light"><?php rwmb_the_value('property_type'); ?></div>
+                            <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title() ?></h2>
+                            <p class="fw-light mb-1">
+                                <i class="fa-solid text-yellow fa-location-dot"></i> <?= rwmb_meta('community') ?>, <?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?>
+                            </p>
+
+                            <div class="d-flex fs-6 fw-light">
+
+                            <?php if( rwmb_meta('bedrooms') ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bed"></i> <?= rwmb_meta('bedrooms') ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( rwmb_meta('bathrooms') ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bath"></i> <?= rwmb_meta('bathrooms') ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( rwmb_meta('construction') ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-house"></i> <?= number_format(rwmb_meta('construction'), 2) ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( rwmb_meta('lot_area') ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-maximize"></i> <?= number_format(rwmb_meta('lot_area'), 2) ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
                 
             <?php endwhile;?>
         </div>
 
-        <?php the_posts_pagination(); ?>
+        <?php $query->the_posts_pagination(); ?>
 
     <?php else: ?>
 
@@ -184,64 +200,89 @@
         </div>
 
         <?php
-            $more_listings =  get_posts(array('post_type' => 'propiedad-en-venta','numberposts' => 3,)); 
+            $more_listings =  get_posts(array('post_type' => 'listings','numberposts' => 3,)); 
         ?>
 
         <div class="row justify-content-evenly">
             <?php foreach($more_listings as $listing): ?>
 
-                <div class="col-11 col-lg-10 col-xl-9 mb-4 mb-lg-5 shadow-4 px-0 rounded-2 blog-card">
+                <a href="<?= get_the_permalink($listing->ID) ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
-                    <a href="<?= get_the_permalink($listing->ID); ?>" class="text-decoration-none">
-                        <div class="card w-100 text-dark fw-normal position-relative">
+                    <div class="shadow-4 rounded-4">
+                        <?php $img = get_portrait_url(rwmb_meta('mls_id')); ?>
 
-                            <div class="badge bg-blue position-absolute top-0 start-0 ms-3 mt-3 z-3">
-                                <?php get_property_type($listing->ID , 'property_type') ?>
+                        <img src="<?= $img ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;">
+
+                        <div class="position-absolute top-0 start-0 mt-2 ms-4">
+                            <div class="position-relative">
+
+                            <?php $price_usd = $listing->price_usd ?>
+
+                            <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($price_usd) ?></div>
+
+                            <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                                USD
                             </div>
-
-                            <div class="row g-0">
-
-                                <?php $images = rwmb_meta('listing_gallery', ['size'=>'medium-large', 'limit'=>1], $listing->ID) ;?>
-                                <div class="col-md-4">
-                                    <img src="<?= $images[0]['url'] ?>" class="w-100 rounded-start" alt="<?= get_the_title($listing->ID);?>" style="height:340px; object-fit:cover;">
-                                </div>
-
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h2 class="fw-bold blue-text mb-1"><?= get_the_title($listing->ID);?></h2>
-                                        <h3 class="fw-light gold-text fs-5 mb-3"><?php get_list_terms($listing->ID, 'regiones'); ?></h3>
-
-                                        <p class="card-text"><?= get_the_excerpt($listing->ID);?></p>
-
-                                        <div class="d-flex fs-5 my-2">
-                                            <div class="gold-text">
-                                                <img width="24px" src="<?php echo get_template_directory_uri();?>/assets/icons/bed-blue.svg" alt="">
-                                                <?= $listing->bedrooms; ?>
-                                            </div>
-
-                                            <div class="gold-text">
-                                                <img width="24px" src="<?php echo get_template_directory_uri();?>/assets/icons/bathtub-blue.svg" alt="" class="ms-3">
-                                                <?= $listing->bathrooms; ?>                                    
-                                            </div>
-
-                                            <div class="gold-text ms-3">
-                                                <span class="blue-text"><?= $listing->construction; ?></span>m²                                 
-                                            </div>
-                                        </div>
-
-                                        <div class="fs-2 fw-bold blue-text">
-                                            $<?= number_format($listing->price) ?> <span class="fs-5"><?= $listing->currency ?></span>
-                                        </div>
-
-                                        <p class="card-text"><small class="text-body-secondary"><?php pll_e('Última actualización');?>: <?= get_the_date('d/m/Y', $listing->ID);?></small></p>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
-                    </a>
-                    
-                </div>
+
+                        <?php
+                            $status = $listing->avaliable;
+
+                            if($status == 'Active'){
+                                $status_classes = 'bg-success';
+                            }elseif( $status == 'Pending' ){
+                                $status_classes = 'bg-warning';
+                            }else{
+                                $status_classes = 'bg-danger';
+                            }
+                        ?>
+
+                        <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
+                            <?= $status ?>
+                        </div>
+
+                        <div class="p-3">
+                            <div class="fs-7 text-secondary fw-light"><?php rwmb_the_value('property_type', [], $listing->ID); ?></div>
+                            <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
+                            <p class="fw-light mb-1">
+                                <i class="fa-solid text-yellow fa-location-dot"></i> <?= $listing->city ?>, <?= $listing->state ?>
+                            </p>
+
+                            <div class="d-flex fs-6 fw-light">
+
+                            <?php if( $listing->bedrooms ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bed"></i> <?= $listing->bedrooms ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( $listing->bathrooms ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bath"></i> <?= $listing->bathrooms ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( $listing->construction ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-house"></i> <?= $listing->construction ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( $listing->lot_area ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-maximize"></i> <?= $listing->lot_area ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
 
             <?php endforeach; ?>
         </div>
@@ -249,50 +290,82 @@
 
     <?php endif; ?>
 
-    <?php if($developments): ?>
-        <h1 class="fs-2 blue-text fw-bold text-center mt-5 mb-0"><?php pll_e('Desarrollos Inmobiliarios');?></h1>
+    <?php if($properties): ?>
+        <h1 class="fs-2 blue-text fw-bold text-center mt-5 mb-0"><?php pll_e('Propiedades Exclusivas');?></h1>
         <hr class="col-11 col-lg-3 mx-auto mt-0 mb-5">
 
         <div class="row justify-content-center">
-            <?php foreach($developments as $dev): ?>
-                <div class="col-11 col-lg-10 col-xl-9 mb-4 mb-lg-5 shadow-4 px-0 rounded-2 blog-card position-relative z-2">
+            <?php foreach($properties as $listing): ?>
+                <a href="<?= get_the_permalink($listing->ID) ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
-                    <a href="<?= get_the_permalink($dev->ID); ?>" class="text-decoration-none">
-                        <div class="card w-100 text-dark fw-normal position-relative">
+                    <div class="shadow-4 rounded-4">
+                        <?php $imgs = rwmb_meta('listing_gallery', ['size'=>'medium_large', 'limit'=>1], $listing->ID ); ?>
+                        <img src="<?= $imgs[0]['url'] ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;" loading="lazy" >
 
-                            <div class="badge bg-blue position-absolute top-0 start-0 ms-3 mt-3 z-3">
-                                <?php get_property_type($dev->ID , 'property_type') ?>
+                        <div class="position-absolute top-0 start-0 shadow-4 mt-2 ms-4">
+                            <div class="position-relative">
+
+                            <div class="position-relative z-3 bg-white rounded-pill px-3 py-1">$<?= number_format($listing->price) ?></div>
+
+                            <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                                MXN
                             </div>
-
-                            <div class="row g-0">
-
-                                <?php $images = rwmb_meta('gallery', ['size'=>'medium-large', 'limit'=>1], $dev->ID) ;?>
-                                <div class="col-12 col-lg-7">
-                                    <img src="<?= $images[0]['url'] ?>" class="w-100 rounded-start" alt="<?= get_the_title($dev->ID);?>" style="max-height:450px; object-fit:cover;">
-                                </div>
-
-                                <div class="col-12 col-lg-5">
-                                    <div class="card-body">
-                                        <h2 class="fw-bold blue-text mb-1 fs-1"><?= get_the_title($dev->ID);?></h2>
-                                        <h3 class="fw-light gold-text fs-4 mb-3"><?php get_list_terms($dev->ID, 'regiones'); ?></h3>
-
-                                        <p class="card-text fs-5"><?= get_the_excerpt($dev->ID);?></p>
-
-                                        <div class="fs-4 fw-light blue-text">
-                                            <?php pll_e('Precios desde')?>: 
-                                            <span class="fw-bolder">
-                                                $<?= number_format($dev->price) ?> <span class="fs-5"><?= $dev->currency ?></span>
-                                            </span> 
-                                        </div>
-
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
-                    </a>
-                    
-                </div>
+
+                        <?php
+                            if($listing->avaliable == 'Disponible'){
+                            $status_classes = 'bg-success';
+                            }elseif( $listing->avaliable == 'Apartado' ){
+                            $status_classes = 'bg-warning';
+                            }else{
+                            $status_classes = 'bg-danger';
+                            }
+                        ?>
+
+                        <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
+                            <?= $listing->avaliable ?>
+                        </div>
+
+                        <div class="p-3">
+                            <div class="fs-7 text-secondary fw-light"><?php get_property_type($listing->ID, 'property_type') ?></div>
+                            <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
+                            <p class="fw-light mb-1"><i class="fa-solid text-yellow fa-location-dot"></i> <?php get_list_terms($listing->ID, 'regiones') ?></p>
+
+                            <div class="d-flex fs-6 fw-light">
+
+                            <?php if( isset($listing->bedrooms) ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bed"></i> <?= $listing->bedrooms ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( isset($listing->bathrooms) ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-bath"></i> <?= $listing->bathrooms ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( isset($listing->construction) ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-house"></i> <?= number_format($listing->construction, 2) ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if( isset($listing->lot_area) ): ?>
+                                <div class="me-3">
+                                <i class="fa-solid fa-maximize"></i> <?= $listing->lot_area ?>m²
+                                </div>
+                            <?php endif; ?>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>

@@ -40,7 +40,7 @@
 
             <div class="col-12 col-lg-5 px-4">
                 <p class="fs-6 fw-light"><?php pll_e('Si estás interesado con comprar o rentar alguna de nuestras propiedades, te invitamos a hacer clic en el siguiente botón para que uno de nuestros asesores pueda brindarte atención especializada.') ?></p>
-                <a href="<?= get_the_permalink(pll_get_post(1802)); ?>" class="btn btn-outline-light text-uppercase fw-light rounded-1"><?php pll_e('Mandar mensaje') ?></a>
+                <a href="<?= get_the_permalink(1802); ?>" class="btn btn-outline-light text-uppercase fw-light rounded-1"><?php pll_e('Mandar mensaje') ?></a>
             </div>
 
         </div>

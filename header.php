@@ -40,6 +40,9 @@
     <link rel="preload" href="<?php echo get_template_directory_uri() ?>/assets/css/all.min.css" as="style">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri();?>/assets/css/all.min.css">
 
+    <link rel="preload" href="<?php echo get_template_directory_uri() ?>/assets/css/nice-select2.css" as="style">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri();?>/assets/css/nice-select2.css">
+
     <link rel="preload" href="<?php echo get_template_directory_uri() ?>/assets/css/fabris-styles-v1.css" as="style">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri() ?>/assets/css/fabris-styles-v1.css">
 

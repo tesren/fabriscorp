@@ -45,7 +45,8 @@
 
         <div class="col-12 col-lg-4">
             <?php 
-                if( pll_current_language() == 'es'){
+                $lang = 'es';
+                if( $lang == 'es'){
                     echo do_shortcode( '[cf7form cf7key="formulario-footer"]' );
                 }
                 else{
@@ -91,6 +92,10 @@
 <?php endif; ?>
 
 <script src="<?php echo get_template_directory_uri()?>/assets/js/splide.min.js" defer></script>
+
+<!-- <script src="<?php echo get_template_directory_uri()?>/assets/js/range-slider.js" defer></script>
+ -->
+<script src="<?php echo get_template_directory_uri()?>/assets/js/nice-select2.min.js" defer></script>
 
 <script src="<?php echo get_template_directory_uri()?>/assets/js/fabris.js" defer></script>
 

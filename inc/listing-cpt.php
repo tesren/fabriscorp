@@ -252,7 +252,7 @@ function listing_register_meta_boxes( $meta_boxes ) {
         ]
     ];
 
-/*      $meta_boxes[] = [
+     $meta_boxes[] = [
         
         'title' => 'Mapa de Google',
         'post_types' => 'propiedad-en-venta',
@@ -271,7 +271,7 @@ function listing_register_meta_boxes( $meta_boxes ) {
                 'api_key'       => 'AIzaSyDlDmMESUjBK1gwNJm5x4hyoS90qacpJmY',
             ]
         ],
-    ]; */
+    ];
 
     return $meta_boxes;
 }
