@@ -48,7 +48,7 @@
 
                     <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                         <h2>
-                            <div class="text-yellow fs-5 text-uppercase"><?php rwmb_the_value('property_type'); ?></div>
+                            <div class="text-yellow fs-5 text-uppercase"><?php pll_e(rwmb_the_value('property_type')); ?></div>
                             <div class="fs-2 fw-bold"><?= get_the_title(); ?></div>
                             <div class="fw-light fs-5"><?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?></div>
                         </h2>
@@ -146,7 +146,7 @@
 
                     <!-- Ubicación -->
                     <div class="col-12 mb-6">
-                        <h4 class="fs-4 text-yellow text-uppercase fw-normal mb-1">Ubicación</h4>
+                        <h4 class="fs-4 text-yellow text-uppercase fw-normal mb-1"><?php pll_e('Ubicación') ?></h4>
                         <p><?= rwmb_meta('directions') ?></p>
                         <hr class="col-12 col-lg-3 mt-0">
                         <div>

@@ -50,11 +50,11 @@
                             ?>
 
                             <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
-                                <?= $status ?>
+                                <?php pll_e($status) ?>
                             </div>
 
                             <div class="p-3">
-                                <div class="fs-7 text-secondary fw-light"><?php rwmb_the_value('property_type'); ?></div>
+                                <div class="fs-7 text-secondary fw-light"><?php pll(rwmb_the_value('property_type')); ?></div>
                                 <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title() ?></h2>
                                 <p class="fw-light mb-1 fs-7 text-capitalize">
                                     <i class="fa-solid text-yellow fa-location-dot"></i> <?= rwmb_meta('community') ?>, <?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?>

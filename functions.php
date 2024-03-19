@@ -101,9 +101,11 @@ function get_property_type($postID, $taxonomy){
 
 	if ( ! empty( $terms_list ) && ! is_wp_error( $terms_list ) ) {
 		foreach ( $terms_list as $term ) {
-			echo $term->name;
+			return $term->name;
 		}
 	}
+
+	return false;
 }
 
 
@@ -256,7 +258,7 @@ function get_portrait_url($id){
 
     $connect = $rets->Login();
 
-	$objects = $rets->GetObject('Property', '640x480', $id, '*', 1);
+	$objects = $rets->GetObject('Property', 'Photo', $id, '*', 1);
 
 	$object = $objects->first();
 	$url = $object->getLocation();
@@ -367,6 +369,7 @@ function fabris_update_listings_auto() {
 					'post_status'  => 'publish',
 					'post_content' => $listing['LIST_78'],
 					'post_author'  => $author_id,
+					'lang' => 'es',
 					'meta_input'   => array(
 						'mls_id'        => $listing['LIST_1'],
 						'price'         => $listing['LIST_240'],
@@ -407,7 +410,7 @@ function custom_listing_columns( $columns ) {
 
     return $columns;
 }
-add_filter( 'manage_listings_posts_columns', 'custom_listing_columns' );
+//add_filter( 'manage_listings_posts_columns', 'custom_listing_columns' );
 
 // Muestra el contenido de la columna personalizada
 function custom_listings_column_content( $column, $post_id ) {
@@ -446,7 +449,7 @@ function custom_listings_column_content( $column, $post_id ) {
     }
     
 }
-add_action( 'manage_listings_posts_custom_column', 'custom_listings_column_content', 1, 2 );
+//add_action( 'manage_listings_posts_custom_column', 'custom_listings_column_content', 1, 2 );
 
 
 function fabris_set_strings_transtaltion(){
@@ -483,7 +486,31 @@ function fabris_set_strings_transtaltion(){
 		'wpp_text' => 'Contactar por WhatsApp',
 		'available' => 'Disponible',
 		'pending' => 'Apartado',
-		'sold' => 'Vendido'
+		'sold' => 'Vendido',
+		'zone' => 'Zona',
+		'any_zone' => 'Cualquier Zona',
+		'property_type' => 'Tipo de propiedad',
+		'condos' => 'Condominios',
+		'houses' => 'Casas y Villas',
+		'lotes' => 'Lotes y Terrenos',
+		'business' => 'Negocios',
+		'multi_family' => 'Multi Familiar',
+		'no_minimum' => 'Sin mínimo',
+		'no_max' => 'Sin Máximo',
+		'search' => 'Buscar',
+		'search_results' => 'Resultados de la Busqueda',
+		'no_results' => 'Lo sentimos, no hay resultados',
+		'but_more_listings' => 'Pero estas propiedades podrían interesarte',
+		'exclusive_properties' => 'Propiedades Exclusivas',
+		'View Photos' => 'Ver Galería',
+		'location' => 'Ubicación',
+		'all_listings'=>'Todas las Propiedades',
+		'luxury_listings' => 'Propiedades de lujo',
+		'property_search' => 'Búsqueda de propiedades',
+		'properties_on_sale' => 'Propiedades en venta',
+		'all_types' => 'Todo',
+		'fractional' => 'Fraccional',
+		'common_interest' => 'Interés Común',
 	];
 
 	$translations = [];

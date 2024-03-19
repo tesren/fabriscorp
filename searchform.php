@@ -291,7 +291,9 @@
         "Zona Urbana",
         "Zona Valle",
         "Zona Versalles",
-        "Zona Viva"
+        "Zona Viva",
+        "Puerto Vallarta",
+        "Riviera Nayarit"
     ];
     
 ?>
@@ -305,20 +307,9 @@
 
         <div class="row justify-content-center">
             
-            <!-- <div class="form-floating">
-                <select name="zona" id="zona" class="form-select py-3" aria-label="Zona">
-                    <option value=""><?php pll_e('Cualquier Zona') ?></option>
-                    <?php foreach($zones as $zone): ?>
-                        <option value="<?= $zone ?>"><?= $zone ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="zona" class="text-secondary"><i class="fa-solid text-yellow fa-bed"></i> <?php pll_e('Zona') ?></label>
-            </div> -->
-
-            
-            <div class="col-12 col-lg-2 px-0 text-center">
+            <div class="col-12 col-lg-2 px-0 text-center mb-3 mb-lg-0">
                 <label for="zona" class="text-secondary"><i class="fa-solid text-yellow fa-location-dot"></i> <?php pll_e('Zona') ?></label>
-                <select name="zona" id="zona" class="align-self-end rounded-0 d-flex w-100" aria-label="Zona">
+                <select name="zona" id="zona" class="align-self-end d-flex w-100" aria-label="Zona">
                     <option value=""><?php pll_e('Cualquier Zona') ?></option>
                     <?php foreach($zones as $zone): ?>
                         <option value="<?= $zone ?>"><?= $zone ?></option>
@@ -326,8 +317,7 @@
                 </select>
             </div>
             
-
-            <div class="col-12 col-lg-3 px-0 text-center">
+            <div class="col-12 col-lg-3 px-0 text-center mb-3 mb-lg-0">
                 <label for="tipo_propiedad" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-house-chimney"></i> <?php pll_e('Tipo de propiedad') ?></label>
                 <select class="form-select py-3 rounded-0" id="tipo_propiedad" aria-label="<?php pll_e('Tipo de propiedad') ?>" name="tipo_propiedad">
 
@@ -336,21 +326,22 @@
                     <option <?php if($property_type=='A'){echo 'selected';} ?> value="A"><?php pll_e('Condominios') ?></option>
                     <option <?php if($property_type=='B'){echo 'selected';} ?> value="B"><?php pll_e('Casas y Villas') ?></option>
                     <option <?php if($property_type=='E'){echo 'selected';} ?> value="E"><?php pll_e('Lotes y Terrenos') ?></option>
+                    <option <?php if($property_type=='F'){echo 'selected';} ?> value="F"><?php pll_e('Interés Común') ?></option>
                     <option <?php if($property_type=='G'){echo 'selected';} ?> value="G"><?php pll_e('Negocios') ?></option>
                     <option <?php if($property_type=='I'){echo 'selected';} ?> value="I"><?php pll_e('Multi Familiar') ?></option>
 
                 </select>
             </div>
 
-            <div class="col-12 col-lg-2 px-0 text-center">
+            <div class="col-12 col-lg-2 px-0 text-center mb-3 mb-lg-0">
                 <label for="recamaras" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-bed"></i> <?php pll_e('Recámaras') ?></label>
-                <input type="number" name="recamaras" id="recamaras" min="1" max="99" class="form-control py-3 rounded-0" placeholder="1" value="<?= $old_bedrooms ?>">
+                <input type="number" name="recamaras" id="recamaras" min="1" max="99" class="form-control py-3 rounded-0" placeholder="<?php pll_e('Recámaras') ?>" value="<?= $old_bedrooms ?>">
             </div>
 
-            <div class="col-12 col-lg-2 px-0 text-center">
-                <label for="min_price" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-dollar-sign"></i> Precio Min.</label>
+            <div class="col-12 col-lg-2 px-0 text-center mb-3 mb-lg-0">
+                <label for="min_price" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-dollar-sign"></i> <?php pll_e('Precio') ?> Min.</label>
                 <select class="form-select py-3 rounded-0" id="min_price" name="min_price" aria-label="Floating label select example">
-                    <option value="0" <?php echo $old_min_price == 0 ? 'selected' : ''; ?>>Sin mínimo</option>
+                    <option value="0" <?php echo $old_min_price == 0 ? 'selected' : ''; ?>><?php pll_e('Sin mínimo') ?></option>
                     <?php
                     for ($i = 1; $i <= 20; $i++) {
                         $precio = $i * 100000;
@@ -365,10 +356,10 @@
             </div>
 
 
-            <div class="col-12 col-lg-2 px-0 text-center">
-                <label for="max_price" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-dollar-sign"></i> Precio Max.</label>
+            <div class="col-12 col-lg-2 px-0 text-center mb-4 mb-lg-0">
+                <label for="max_price" class="text-secondary" style="margin-bottom:2px;"><i class="fa-solid text-yellow fa-dollar-sign"></i> <?php pll_e('Precio') ?> Max.</label>
                 <select class="form-select py-3 rounded-0" id="max_price" name="max_price" aria-label="Floating label select example">
-                    <option value="90000000" <?php echo $old_max_price == 0 ? 'selected' : ''; ?>>Sin Máximo</option>
+                    <option value="90000000" <?php echo $old_max_price == 0 ? 'selected' : ''; ?>><?php pll_e('Sin Máximo') ?></option>
                     <?php
                     for ($i = 2; $i <= 30; $i++) {
                         $precio = $i * 100000;
@@ -382,10 +373,10 @@
                 </select>
             </div>
 
-            <input type="hidden" name="submit" value="<?php pll_e('Search');?>">
+            <input type="hidden" name="submit" value="Search">
 
-            <button class="btn btn-yellow col-12 col-lg-1 align-self-end py-3 rounded-0" type="submit" style="margin-top:2px;">
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <button id="btn_submit" class="btn btn-yellow col-12 col-lg-1 align-self-end py-3" type="submit" style="margin-top:2px;">
+                <i class="fa-solid fa-magnifying-glass"></i> <span class="d-inline d-lg-none"><?php pll_e('Buscar');?></span>
             </button>
 
         </div>

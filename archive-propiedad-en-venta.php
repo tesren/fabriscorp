@@ -47,11 +47,11 @@
                             ?>
 
                             <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
-                                <?= $status ?>
+                                <?php pll_e($status) ?>
                             </div>
 
                             <div class="p-3">
-                                <div class="fs-7 text-secondary fw-light"><?php get_property_type(get_the_ID(), 'property_type') ?></div>
+                                <div class="fs-7 text-secondary fw-light"><?php pll_e(get_property_type(get_the_ID(), 'property_type')) ?></div>
                                 <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title() ?></h2>
                                 <p class="fw-light mb-1">
                                     <i class="fa-solid text-yellow fa-location-dot"></i> <?php get_list_terms(get_the_ID(), 'regiones') ?>

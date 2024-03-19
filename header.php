@@ -12,17 +12,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&display=swap" rel="stylesheet">
 
     <?php if(is_front_page()): ?>
-        <title>Fabris Corp - <?php pll_e('Propiedades en Nuevo Vallarta y Riviera Nayarit');?></title>
-        <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
+      <title>Fabris Corp - <?php pll_e('Propiedades en Nuevo Vallarta y Riviera Nayarit');?></title>
+      <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
     <?php elseif(is_post_type_archive()):?>
-        <title>Fabris Corp - <?php echo post_type_archive_title(); ?></title>
-        <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
+      <title>Fabris Corp - <?php pll_e('Propiedades en venta') ; ?></title>
+      <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
     <?php elseif( is_page() ):?>
-        <title>Fabris Corp - <?php echo single_post_title(); ?></title>
-        <meta name="description" content="<?php echo get_the_excerpt(); ?>">
+      <title>Fabris Corp - <?php echo single_post_title(); ?></title>
+      <meta name="description" content="<?php echo get_the_excerpt(); ?>">
+    <?php elseif( is_search() ):?>
+      <title>Fabris Corp - <?php pll_e('Búsqueda de propiedades') ?></title>
+      <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
     <?php else: ?>
-        <title>Fabris Corp - <?php echo the_title(); ?></title>
-        <meta name="description" content="<?php echo get_the_excerpt(); ?>">
+      <title>Fabris Corp - <?php echo the_title(); ?></title>
+      <meta name="description" content="<?php echo get_the_excerpt(); ?>">
 	  <?php endif; ?>
 
     <!-- CSS -->

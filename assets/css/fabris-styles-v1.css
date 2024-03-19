@@ -200,6 +200,18 @@ label{
     align-self: center;
 }
 
+.nice-select{
+    height: 58px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+#btn_submit{
+    border-radius: 0 10px 10px 0;
+}
+
 @media (max-width: 992px) {
     .fs-0{
         font-size: 2.5rem;
@@ -210,6 +222,15 @@ label{
     .my-6{
       margin-top: 4.5rem;
       margin-bottom: 4.5rem;
+    }
+
+    #btn_submit{
+        border-radius: 10px;
+    }
+
+    .nice-select{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
     }
    
 }

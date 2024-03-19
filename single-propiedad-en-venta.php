@@ -48,7 +48,7 @@
 
                     <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                         <h2>
-                            <div class="text-yellow fs-5 text-uppercase"><?php get_property_type(get_the_ID(), 'property_type') ?></div>
+                            <div class="text-yellow fs-5 text-uppercase"><?php pll_e(get_property_type(get_the_ID(), 'property_type')) ?></div>
                             <div class="fs-2 fw-bold"><?= get_the_title(); ?></div>
                             <div class="fw-light fs-5"><?php get_list_terms(get_the_ID(), 'regiones'); ?></div>
                         </h2>
@@ -98,9 +98,9 @@
 
                                 <h2 class="fs-3 blue-text fw-bold mb-0">
                                     <span id="price_mxn">$<?= number_format(rwmb_meta('price')); ?> MXN</span>
-                                    <span id="price_usd" class="d-none">$<?= number_format(rwmb_meta('price_usd')); ?> USD</span>
 
                                     <?php if( rwmb_meta('price_usd') ): ?>
+                                        <span id="price_usd" class="d-none">$<?= number_format(rwmb_meta('price_usd')); ?> USD</span>
                                         <img onclick="changeCurrency()" data-bs-toggle="tooltip" data-bs-title="Cambiar Moneda" width="20px" src="<?= get_template_directory_uri()?>/assets/images/change-currency.webp" alt="Change Currency">
                                     <?php endif; ?>
                                 </h2>

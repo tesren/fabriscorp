@@ -35,10 +35,10 @@
               <?php $imgs = rwmb_meta('listing_gallery', ['size'=>'medium_large', 'limit'=>1], $listing->ID ); ?>
               <img src="<?= $imgs[0]['url'] ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;" <?php if($i>6){echo ' loading = "lazy" ';} ?> >
 
-              <div class="position-absolute top-0 start-0 shadow-4 mt-2 ms-4">
+              <div class="position-absolute top-0 start-0 mt-2 ms-4">
                 <div class="position-relative">
 
-                  <div class="position-relative z-3 bg-white rounded-pill px-3 py-1">$<?= number_format($listing->price) ?></div>
+                  <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($listing->price) ?></div>
 
                   <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
                     MXN
@@ -58,11 +58,11 @@
               ?>
 
               <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
-                <?= $listing->avaliable ?>
+                <?php pll_e($listing->avaliable) ?>
               </div>
 
               <div class="p-3">
-                <div class="fs-7 text-secondary fw-light"><?php get_property_type($listing->ID, 'property_type') ?></div>
+                <div class="fs-7 text-secondary fw-light"><?php pll_e(get_property_type($listing->ID, 'property_type')) ?></div>
                 <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
                 <p class="fw-light mb-1"><i class="fa-solid text-yellow fa-location-dot"></i> <?php get_list_terms($listing->ID, 'regiones') ?></p>
 

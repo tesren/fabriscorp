@@ -61,6 +61,7 @@
                         'post_status'  => 'publish',
                         'post_content' => $listing['LIST_78'],
                         'post_author'  => $author_id,
+					    'lang' => 'es',
                         'meta_input'   => array(
                             'mls_id'        => $listing['LIST_1'],
                             'price'         => $listing['LIST_240'],

@@ -2,18 +2,61 @@
 
     get_header();
 
+    $property_types_array = [
+        'A' => 'condominios',
+        'B' => 'casas',
+        'E' => 'lotes',
+        'F' => 'interes-comun',
+        'G' => 'negocios',
+        'H' => 'fraccional',
+        'I' => 'multi-familiar'
+    ];
+
+    $zones = get_terms( array(
+        'taxonomy'          => 'regiones',
+        'parent'            => 0,
+        'hide_empty'        => false,
+    ) );
+
     if( isset($_GET['zona']) and !empty($_GET['zona'])){
         $zone = $_GET['zona'];
-        $zone_query = [
-            'key' => 'community',
+
+        if($zone == 'Puerto Vallarta' or $zone == 'Riviera Nayarit'){
+            $zone_query = [
+                'key' => 'city',
+                'value' => $zone,
+                'compare' => 'LIKE'
+            ];
+        }
+        else{
+            $zone_query = [
+                'key' => 'community',
+                'value' => $zone,
+                'compare' => 'LIKE'
+            ];
+        }
+        
+        $zone_tax_query = [
+            'taxonomy' => 'regiones',
+            'field' => 'name',
+            'include_children' => true,
+            'operator' => 'LIKE',
             'value' => $zone,
-            'compare' => 'LIKE'
         ];
+
     }else{
         $zone_query = [
             'key' => 'community',
             'value' => 'Nave Espacial',
             'compare' => '!='
+        ];
+
+        $zone_tax_query = [
+            'taxonomy' => 'regiones',
+            'field' => 'name',
+            'include_children' => true,
+            'operator' => '!=',
+            'value' => 'Marte'
         ];
     }
 
@@ -26,11 +69,39 @@
             'compare' => 'LIKE'
         ];
 
+        $taxonomy_name = 'property_type';
+        $term = get_term_by('slug', $property_types_array[$property_type], $taxonomy_name);
+        $taxonomy_slug = $term->slug;
+
+        $ptype_tax_query = [
+            'taxonomy' => 'property_type',
+            'field' => 'slug',
+            'terms' => $taxonomy_slug,
+        ];
+
     }else{
         $property_type_query = [
             'key' => 'property_type',
             'value' => 'Nave Espacial',
             'compare' => '!='
+        ];
+
+        $property_types = get_terms( array(
+            'taxonomy'          => 'property_type',
+            'parent'            => 0,
+            'hide_empty'        => false,
+        ) );
+
+        $type_slugs = [];
+
+        foreach ($property_types as $type){
+            array_push($type_slugs, $type->slug);
+        } 
+
+        $ptype_tax_query = [
+            'taxonomy' => 'property_type',
+            'field' => 'slug',
+            'terms' => $type_slugs,
         ];
     }
 
@@ -62,12 +133,28 @@
     $properties = get_posts(array(
         'post_type' => 'propiedad-en-venta',
         'numberposts' => -1,
+        'meta_query' =>[
+            [
+                'key' => 'price_usd',
+                'type' => 'NUMERIC',
+                'value' => array($min_price, $max_price),
+                'compare' => 'BETWEEN'
+            ],
+            $bedrooms_array_query,
+        ],
+        'tax_query' => [
+            $ptype_tax_query,
+            $zone_tax_query,
+        ]
     ));
-    
+
+    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
     //listings de flex
     $args = array(
         'post_type' => 'listings',
         'posts_per_page' => 12,
+        'paged' => $paged,
         'meta_query' => [
             $property_type_query,
             $bedrooms_array_query,
@@ -82,12 +169,12 @@
         
     );
     
-
     $query = new WP_Query($args);
-    
-?>
 
-    <?php// var_dump($query); ?>
+    $temp_query = $wp_query;
+    $wp_query = NULL;
+    $wp_query = $query;
+?>
 
     <?php if($query -> have_posts() ):?>
 
@@ -98,9 +185,86 @@
             <?php echo get_search_form();?>
         </div>
 
-        <div class="container row mb-6">
+        <div class="container row mb-5">
 
-            <?php while($query ->have_posts() ) : $query ->the_post(); ?>
+            <!-- Propiedades Exclusivas -->
+            <?php if( count($properties) > 0 and $paged == 1 ): ?>
+                <?php foreach($properties as $listing): ?>
+                    <a href="<?= get_the_permalink($listing->ID) ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
+
+                        <div class="shadow-4 rounded-4">
+                            <?php $imgs = rwmb_meta('listing_gallery', ['size'=>'medium_large', 'limit'=>1], $listing->ID ); ?>
+                            <img src="<?= $imgs[0]['url'] ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;" loading="lazy" >
+
+                            <div class="position-absolute top-0 start-0 shadow-4 mt-2 ms-4">
+                                <div class="position-relative">
+
+                                <div class="position-relative z-3 bg-white rounded-pill px-3 py-1">$<?= number_format($listing->price) ?></div>
+
+                                <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                                    MXN
+                                </div>
+
+                                </div>
+                            </div>
+
+                            <?php
+                                if($listing->avaliable == 'Disponible'){
+                                $status_classes = 'bg-success';
+                                }elseif( $listing->avaliable == 'Apartado' ){
+                                $status_classes = 'bg-warning';
+                                }else{
+                                $status_classes = 'bg-danger';
+                                }
+                            ?>
+
+                            <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
+                                <?= $listing->avaliable ?>
+                            </div>
+
+                            <div class="p-3">
+                                <div class="fs-7 text-secondary fw-light"><?php pll_e(get_property_type($listing->ID, 'property_type')) ?></div>
+                                <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
+                                <p class="fw-light mb-1"><i class="fa-solid text-yellow fa-location-dot"></i> <?php get_list_terms($listing->ID, 'regiones') ?></p>
+
+                                <div class="d-flex fs-6 fw-light">
+
+                                <?php if( isset($listing->bedrooms) ): ?>
+                                    <div class="me-3">
+                                    <i class="fa-solid fa-bed"></i> <?= $listing->bedrooms ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if( isset($listing->bathrooms) ): ?>
+                                    <div class="me-3">
+                                    <i class="fa-solid fa-bath"></i> <?= $listing->bathrooms ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if( isset($listing->construction) ): ?>
+                                    <div class="me-3">
+                                    <i class="fa-solid fa-house"></i> <?= number_format($listing->construction, 2) ?>m²
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if( isset($listing->lot_area) ): ?>
+                                    <div class="me-3">
+                                    <i class="fa-solid fa-maximize"></i> <?= $listing->lot_area ?>m²
+                                    </div>
+                                <?php endif; ?>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <!-- Propiedades de Flex -->
+            <?php while($query->have_posts() ) : $query->the_post(); ?>
 
                 <a href="<?= get_the_permalink() ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
@@ -183,7 +347,10 @@
             <?php endwhile;?>
         </div>
 
-        <?php $query->the_posts_pagination(); ?>
+        <?php the_posts_pagination(array(
+            'prev_text' => '<<',
+            'next_text' => '>>',
+        )); ?>
 
     <?php else: ?>
 
@@ -290,86 +457,11 @@
 
     <?php endif; ?>
 
-    <?php if($properties): ?>
-        <h1 class="fs-2 blue-text fw-bold text-center mt-5 mb-0"><?php pll_e('Propiedades Exclusivas');?></h1>
-        <hr class="col-11 col-lg-3 mx-auto mt-0 mb-5">
-
-        <div class="row justify-content-center">
-            <?php foreach($properties as $listing): ?>
-                <a href="<?= get_the_permalink($listing->ID) ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
-
-                    <div class="shadow-4 rounded-4">
-                        <?php $imgs = rwmb_meta('listing_gallery', ['size'=>'medium_large', 'limit'=>1], $listing->ID ); ?>
-                        <img src="<?= $imgs[0]['url'] ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;" loading="lazy" >
-
-                        <div class="position-absolute top-0 start-0 shadow-4 mt-2 ms-4">
-                            <div class="position-relative">
-
-                            <div class="position-relative z-3 bg-white rounded-pill px-3 py-1">$<?= number_format($listing->price) ?></div>
-
-                            <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
-                                MXN
-                            </div>
-
-                            </div>
-                        </div>
-
-                        <?php
-                            if($listing->avaliable == 'Disponible'){
-                            $status_classes = 'bg-success';
-                            }elseif( $listing->avaliable == 'Apartado' ){
-                            $status_classes = 'bg-warning';
-                            }else{
-                            $status_classes = 'bg-danger';
-                            }
-                        ?>
-
-                        <div class="position-absolute end-0 shadow-4 me-4 px-3 py-1 text-white rounded-pill <?= $status_classes ?>" style="top:235px;">
-                            <?= $listing->avaliable ?>
-                        </div>
-
-                        <div class="p-3">
-                            <div class="fs-7 text-secondary fw-light"><?php get_property_type($listing->ID, 'property_type') ?></div>
-                            <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
-                            <p class="fw-light mb-1"><i class="fa-solid text-yellow fa-location-dot"></i> <?php get_list_terms($listing->ID, 'regiones') ?></p>
-
-                            <div class="d-flex fs-6 fw-light">
-
-                            <?php if( isset($listing->bedrooms) ): ?>
-                                <div class="me-3">
-                                <i class="fa-solid fa-bed"></i> <?= $listing->bedrooms ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if( isset($listing->bathrooms) ): ?>
-                                <div class="me-3">
-                                <i class="fa-solid fa-bath"></i> <?= $listing->bathrooms ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if( isset($listing->construction) ): ?>
-                                <div class="me-3">
-                                <i class="fa-solid fa-house"></i> <?= number_format($listing->construction, 2) ?>m²
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if( isset($listing->lot_area) ): ?>
-                                <div class="me-3">
-                                <i class="fa-solid fa-maximize"></i> <?= $listing->lot_area ?>m²
-                                </div>
-                            <?php endif; ?>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <?php wp_reset_postdata(); ?>
+    <?php 
+        wp_reset_postdata(); 
+        // Reset main query object
+        $wp_query = NULL;
+        $wp_query = $temp_query;
+    ?>
 
 <?php get_footer(); ?>
