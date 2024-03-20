@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="p-3">
-                                <div class="fs-7 text-secondary fw-light"><?php pll(rwmb_the_value('property_type')); ?></div>
+                                <div class="fs-7 text-secondary fw-light"><?php pll_e( rwmb_the_value('property_type', [], get_the_ID(), false) ); ?></div>
                                 <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title() ?></h2>
                                 <p class="fw-light mb-1 fs-7 text-capitalize">
                                     <i class="fa-solid text-yellow fa-location-dot"></i> <?= rwmb_meta('community') ?>, <?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?>

@@ -335,10 +335,14 @@ function fabris_update_listings_auto() {
 			// Verificar si el post ya existe por su título
 			$post_id = post_exists($listing['LIST_35']);
 
-			if ($post_id) {
-				// Si el post existe, actualiza sus metadatos
-				$listing_post = array(
-					'ID'           => $post_id,
+			$listing_en = pll_get_post($post_id, 'en'); // Obtener la traducción en inglés
+			$listing_es = pll_get_post($post_id, 'es'); // Obtener la traducción en español
+
+			if ($listing_es != null and $listing_en != null and $post_id != 0) {
+
+				// Si ambos posts existen, actualiza sus metadatos
+				$listing_post_es = array(
+					'ID'           => $listing_es,
 					'post_content' => $listing['LIST_78'],
 					'meta_input'   => array(
 						'mls_id'        => $listing['LIST_1'],
@@ -359,9 +363,32 @@ function fabris_update_listings_auto() {
 					)
 				);
 
-				wp_update_post($listing_post);
+				$listing_post_en = array(
+					'ID'           => $listing_en,
+					'post_content' => $listing['LIST_78'],
+					'meta_input'   => array(
+						'mls_id'        => $listing['LIST_1'],
+						'price'         => $listing['LIST_240'],
+						'price_usd'     => $listing['LIST_22'],
+						'property_type' => $listing['LIST_8'],
+						'avaliable'     => $listing['LIST_15'],
+						'bedrooms'      => $listing['LIST_66'] ?? '0',
+						'bathrooms'     => $listing['LIST_67'] ?? '0',
+						'construction'  => $listing['LIST_159'] ?? $listing['LIST_126'] ?? '0',
+						'lot_area'      => $listing['LIST_119'] ?? $listing['LIST_126'] ?? '0',
+						'state'         => $listing['LIST_40'],
+						'city'          => $listing['LIST_39'],
+						'community'     => $listing['LIST_130'],
+						'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
+						'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
+						'directions'    => $listing['LIST_82'],
+					)
+				);
+
+				wp_update_post($listing_post_es);
+				wp_update_post($listing_post_en);
 			} 
-			else {
+			elseif( $post_id == 0 ) {
 				// Si el post no existe, créalo
 				$listing_post = array(
 					'post_type'    => 'listings',
@@ -369,7 +396,6 @@ function fabris_update_listings_auto() {
 					'post_status'  => 'publish',
 					'post_content' => $listing['LIST_78'],
 					'post_author'  => $author_id,
-					'lang' => 'es',
 					'meta_input'   => array(
 						'mls_id'        => $listing['LIST_1'],
 						'price'         => $listing['LIST_240'],
@@ -389,7 +415,20 @@ function fabris_update_listings_auto() {
 					)
 				);
 
-				wp_insert_post($listing_post);
+				//post en español
+				$post_es = wp_insert_post($listing_post);
+                pll_set_post_language($post_es, 'es');
+
+				//post en inglés
+				$post_en = wp_insert_post($listing_post);
+                pll_set_post_language($post_en, 'en');
+
+				// Guardar la relación de traducción entre los posts
+				pll_save_post_translations([
+					'es' => $post_es,
+					'en' => $post_en,
+				]);
+
 			}
 
 		}
@@ -511,6 +550,8 @@ function fabris_set_strings_transtaltion(){
 		'all_types' => 'Todo',
 		'fractional' => 'Fraccional',
 		'common_interest' => 'Interés Común',
+		'land' => 'Lotes',
+		'fill_contact_form' => 'Llene el formulario y nos comunicaremos con usted lo más pronto posible',
 	];
 
 	$translations = [];

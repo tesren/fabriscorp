@@ -88,6 +88,74 @@
         }
 
     }
+
+    //no hace nada alv
+    if( isset( $_POST['translate_listings'] ) ){
+
+        $listings = get_posts([
+            'post_type' => 'listings',
+            'numberposts' => -1,
+            'lang' => 'es'
+        ]);
+    
+
+        foreach($listings as $listing){
+    
+            $listing_en = pll_get_post($listing->ID, 'en'); // Obtener la traducción en inglés
+    
+            if( $listing_en == null ){
+    
+                $author_id = get_current_user_id() ?: 1;
+    
+                // Obtener el título y contenido del post en español
+                $post_title = $listing->post_title;
+                $post_content = $listing->post_content;
+    
+                // Si el post no existe en inglés, créalo
+                $listing_post = array(
+                    'post_type'    => 'listings',
+                    'post_title'   => $post_title,
+                    'post_status'  => 'publish',
+                    'post_content' => $post_content,
+                    'post_author'  => $author_id,
+                    'lang'         => 'en',
+                    'meta_input'   => array(
+                        'mls_id'        => $listing->mls_id,
+                        'price'         => $listing->price,
+                        'price_usd'     => $listing->price_usd,
+                        'property_type' => $listing->property_type,
+                        'avaliable'     => $listing->avaliable,
+                        'bedrooms'      => $listing->bedrooms ?? '0',
+                        'bathrooms'     => $listing->bathrooms ?? '0',
+                        'construction'  => $listing->construction ?? '0',
+                        'lot_area'      => $listing->lot_area ?? '0',
+                        'state'         => $listing->state,
+                        'city'          => $listing->city,
+                        'community'     => $listing->community,
+                        'map'           => $listing->map,
+                        'amenities'     => $listing->amenities,
+                        'directions'    => $listing->directions,
+                    )
+                );
+    
+                $new_post = wp_insert_post($listing_post); // Insertar el nuevo post en inglés
+
+                pll_set_post_language($new_post, 'en');
+    
+                if ($new_post) {
+                    // Guardar la relación de traducción entre los posts
+                    pll_save_post_translations([
+                        'es' => $listing->ID,
+                        'en' => $new_post,
+                    ]);
+                }
+    
+            }
+    
+        }
+    
+    }
+    
 ?>
 
 <h1 class="fs-4 mt-3 fw-normal mb-4">Propiedades Flex MLS</h1>
@@ -97,7 +165,7 @@
 
 <div class="row w-100 mx-auto" >
     
-    <div class="col-12 col-lg-7 col-xxl-5 bg-white p-4 border border-1 rounded-3">
+    <div class="col-12 col-lg-6 col-xxl-4 bg-white p-4 border border-1 rounded-3">
         <h2 class="fs-5">Actualizar propiedades de Flex Manualmente</h2>
         <p class="fs-6 text-secondary">Desde este formulario puedes actualizar la información y la cantidad de listings de MLS que hay en sitio web de forma manual.</p>
 
@@ -160,5 +228,15 @@
         </form>
     </div>
     
+    <div class="col-12 col-lg-5 col-xxl-4 bg-white p-4 border border-1 rounded-3 mx-2 align-self-start">
+        <h2 class="fs-5">Traducir propiedades de Flex MLS</h2>
+        <p class="fs-6 text-secondary">Esta accion no traduce literalmente el post, solo crea su versión de inglés para poder ser mostrado en el sitio web en Inglés.</p>
+
+        <form action="" method="post">
+            <input type="submit" name="translate_listings" value="Actualizar" class="btn btn-primary w-100">
+
+        </form>
+
+    </div>
 
 </div>

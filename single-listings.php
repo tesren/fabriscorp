@@ -81,7 +81,7 @@
 
                             <?php if(rwmb_meta('lot_area')): ?>
                                 <div class="text-center me-2">
-                                    <div class="fw-normal"><?= rwmb_meta('lot_area'); ?>m² <i class="fa-solid text-yellow fa-maximize"></i></div>
+                                    <div class="fw-normal fs-4"><?= rwmb_meta('lot_area'); ?>m² <i class="fa-solid text-yellow fa-maximize"></i></div>
                                     <div class="text-secondary"><?php pll_e('Lote');?></div>
                                 </div>
                             <?php endif; ?>
@@ -100,7 +100,7 @@
                                     <span id="price_usd">$<?= number_format(rwmb_meta('price_usd')); ?> USD</span>
 
                                     <?php if( rwmb_meta('price') ): ?>
-                                        <span id="price_mxn" class="fs-6">$<?= number_format(rwmb_meta('price')) ?? 0; ?> MXN</span>
+                                        <br><span id="price_mxn" class="fs-6">$<?= number_format(rwmb_meta('price')) ?? 0; ?> MXN</span>
                                     <?php endif; ?>
                                 </h2>
 

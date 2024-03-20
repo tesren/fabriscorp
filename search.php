@@ -165,6 +165,11 @@
                 'value' => array($min_price, $max_price),
                 'compare' => 'BETWEEN'
             ],
+            [
+                'key' => 'avaliable',
+                'value' => 'Active',
+                'compare' => 'LIKE'
+            ],
         ],
         
     );
@@ -304,7 +309,7 @@
                         </div>
 
                         <div class="p-3">
-                            <div class="fs-7 text-secondary fw-light"><?php rwmb_the_value('property_type'); ?></div>
+                            <div class="fs-7 text-secondary fw-light"><?php pll_e(rwmb_the_value('property_type', [], get_the_ID(), false)); ?></div>
                             <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title() ?></h2>
                             <p class="fw-light mb-1">
                                 <i class="fa-solid text-yellow fa-location-dot"></i> <?= rwmb_meta('community') ?>, <?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?>
@@ -359,24 +364,25 @@
             <h2 class="fs-4 fw-light gold-text"><?php pll_e('Pero estas propiedades podrían interesarte'); ?></h2>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8 mb-5">
-                <!-- Formulario de busqueda -->
-                <?php echo get_search_form();?>
-            </div>
+        <div class="container mb-5">
+            <?php echo get_search_form();?>
         </div>
 
         <?php
-            $more_listings =  get_posts(array('post_type' => 'listings','numberposts' => 3,)); 
+            $more_listings = get_posts(array(
+                'post_type'      => 'listings',
+                'numberposts'    => 150,
+                'orderby'        => 'rand', // Ordenar de forma aleatoria
+            ));
         ?>
 
-        <div class="row justify-content-evenly">
-            <?php foreach($more_listings as $listing): ?>
+        <div class="container row justify-content-evenly mb-6">
+            <?php $i=0; foreach($more_listings as $listing): ?>
 
                 <a href="<?= get_the_permalink($listing->ID) ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
                     <div class="shadow-4 rounded-4">
-                        <?php $img = get_portrait_url(rwmb_meta('mls_id')); ?>
+                        <?php $img = get_portrait_url(rwmb_meta('mls_id', [], $listing->ID)); ?>
 
                         <img src="<?= $img ?>" alt="<?= get_the_title($listing->ID) ?>" class="w-100 rounded-top-4" style="height:280px; object-fit:cover;">
 
@@ -451,7 +457,9 @@
 
                 </a>
 
-            <?php endforeach; ?>
+                <?php if($i==14){break;} ?>
+
+            <?php $i++; endforeach; ?>
         </div>
        
 
