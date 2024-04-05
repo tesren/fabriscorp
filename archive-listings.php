@@ -107,4 +107,7 @@
 
     </section>
 
+    <?php echo  get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
+
+
 <?php get_footer(); ?>

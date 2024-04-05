@@ -1,10 +1,11 @@
+<!-- Footer -->
 <footer class="bg-black text-white pt-4 pt-lg-5" style="background-image:url('<?= get_template_directory_uri().'/assets/images/footer-bg.webp'; ?>');">
 
     <div class="row justify-content-center px-2 mb-5">
 
         <div class="col-12 col-lg-2 mb-5 mb-lg-0">
             <div class="text-center text-lg-start">
-                <img src="<?php echo get_template_directory_uri()?>/assets/images/logo-fabriscorp.webp" alt="Logo de HeyHaus" class="col-6 col-lg-9 mx-auto mb-4">
+                <img src="<?php echo get_template_directory_uri()?>/assets/images/logo-fabris-new.webp" alt="Logo de HeyHaus" class="col-6 col-lg-9 mx-auto mb-4">
             </div>
             <p class="fs-7"><?php pll_e('Fabris Corp es una empresa inmobiliaria experta en Bienes Raíces en todo México.') ?></p>
 

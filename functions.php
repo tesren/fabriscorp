@@ -3,8 +3,6 @@
  * Fabris Corp functions and definitions
 */
 
-date_default_timezone_set('America/Mexico_City');
-
 require_once("vendor/autoload.php");
 
 if ( ! function_exists( 'fabris_theme_support' ) ) :
@@ -318,6 +316,8 @@ function fabris_update_listings_auto() {
 
 	$results = [];
 
+	$types = ['A', 'B', 'E', 'F', 'G', 'H', 'I'];
+
 	foreach($types as $type){
 		$listings = $rets->Search('Property', $type, '(LIST_87=2007-01-05T07:00:00+)', ['Limit' => 9999]);
 		$listings = $listings->toArray();
@@ -552,6 +552,8 @@ function fabris_set_strings_transtaltion(){
 		'common_interest' => 'Interés Común',
 		'land' => 'Lotes',
 		'fill_contact_form' => 'Llene el formulario y nos comunicaremos con usted lo más pronto posible',
+		'mls_disclaimer' => 'Toda la información se considera confiable, pero no garantizada. Los listados en este sitio se muestran por cortesía del programa IDX de AMPI Vallarta Nayarit MLS y pueden no ser listados del propietario del sitio. Datos actualizados por última vez: ',
+		'price_disclaimer'=> 'Los precios publicados en dólares deberán ser pagados en pesos mexicanos, de acuerdo con el tipo de cambio establecido en el Diario Oficial de la Federación en la fecha en que se realicen los pagos por la compraventa.',
 	];
 
 	$translations = [];

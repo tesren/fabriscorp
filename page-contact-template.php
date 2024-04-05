@@ -7,7 +7,7 @@ get_header();
 
 <section class="position-relative mb-6">
 
-    <img src="<?= get_template_directory_uri().'/assets/images/contact-form-bg.webp' ?>" alt="Fabris Corp - Contacto" class="w-100" style="height:40vh; object-fit:cover;">
+    <img src="<?= get_template_directory_uri().'/assets/images/house-background.webp' ?>" alt="Fabris Corp - Contacto" class="w-100" style="height:40vh; object-fit:cover;">
 
     <div class="row justify-content-center position-absolute top-0 start-0 h-100 text-white z-3">
 
@@ -29,7 +29,7 @@ get_header();
 
     <div class="col-12 col-lg-4 d-none d-lg-block align-self-center">
 
-        <img src="<?= get_template_directory_uri() ?>/assets/images/contact-side-img.webp" alt="Fabris Corp - Contacto" class="w-100">
+        <img src="<?= get_template_directory_uri() ?>/assets/images/pool-ocean-view.webp" alt="Fabris Corp - Contacto" class="w-100">
 
     </div>
 

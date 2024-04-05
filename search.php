@@ -472,4 +472,6 @@
         $wp_query = $temp_query;
     ?>
 
+    <?php echo  get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
+
 <?php get_footer(); ?>

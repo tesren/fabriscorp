@@ -58,7 +58,7 @@
   <div class="container-fluid">
 
     <a class="navbar-brand" href="<?= get_home_url();?>">
-        <img width="160px" src="<?php echo get_template_directory_uri();?>/assets/images/logo-fabriscorp.webp" alt="Logo de Fabris Corp">
+      <img width="140px" src="<?php echo get_template_directory_uri();?>/assets/images/logo-fabris-new.webp" alt="Logo de Fabris Corp">
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -69,7 +69,7 @@
 
       <div class="offcanvas-header bg-black">
         <div class="offcanvas-title" id="offcanvasNavbarLabel">
-            <img class="w-75 px-4" src="<?php echo get_template_directory_uri();?>/assets/images/logo-fabriscorp.webp" alt="Logo de Fabris Corp">
+            <img class="w-75 px-4" src="<?php echo get_template_directory_uri();?>/assets/images/logo-fabris-new.webp" alt="Logo de Fabris Corp">
         </div>
 
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>

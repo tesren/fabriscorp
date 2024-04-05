@@ -187,7 +187,7 @@
 
                     </div>
 
-                    <img src="<?= get_template_directory_uri().'/assets/images/contact-form-bg.webp' ?>" alt="Fabris Corp Properties" class="z-1 px-0 w-100 h-100 position-absolute top-0 start-0" style="object-fit:cover;">
+                    <img src="<?= get_template_directory_uri().'/assets/images/air-view-beach.webp' ?>" alt="Fabris Corp Properties" class="z-1 px-0 w-100 h-100 position-absolute top-0 start-0" style="object-fit:cover;">
 
                     <div class="fondo-oscuro"></div>
 

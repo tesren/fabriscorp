@@ -180,6 +180,12 @@ function properties_register_meta_boxes( $meta_boxes ) {
                 'type'    => 'textarea',
                 'desc'    => 'Escriba todas las amenidades'
             ],
+            [
+                'name'    => 'Última actualización en Flex',
+                'id'      => 'last_mls_update',
+                'type'    => 'text',
+                'size' => 30,
+            ],
             
             // More fields.
         ],

@@ -122,7 +122,7 @@ function listing_register_meta_boxes( $meta_boxes ) {
                 'desc'  => 'Precio de la propiedad en pesos mexicanos',
                 'id'    => 'price',
                 'type'  => 'number',
-                'required'=> true,
+                'required'=> false,
                 'size' => 30,
             ],
             [

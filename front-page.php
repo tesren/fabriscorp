@@ -103,7 +103,7 @@
         <?php $i++; endforeach; ?>
 
         <div class="col-12 text-center mt-5">
-          <a href="<?= get_post_type_archive_link( 'propiedad-en-venta' ) ?>" class="btn btn-yellow rounded-2"><?php pll_e('Ver todas las Propiedades') ?></a>
+          <a href="<?= get_post_type_archive_link( 'listings' ) ?>" class="btn btn-yellow rounded-2"><?php pll_e('Ver todas las Propiedades') ?></a>
         </div>
 
       </div>

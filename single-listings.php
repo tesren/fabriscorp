@@ -48,7 +48,7 @@
 
                     <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                         <h2>
-                            <div class="text-yellow fs-5 text-uppercase"><?php pll_e(rwmb_the_value('property_type')); ?></div>
+                            <div class="text-yellow fs-5 text-uppercase"><?php pll_e(rwmb_the_value('property_type', [], get_the_ID(), false)); ?></div>
                             <div class="fs-2 fw-bold"><?= get_the_title(); ?></div>
                             <div class="fw-light fs-5"><?= rwmb_meta('city') ?>, <?= rwmb_meta('state') ?></div>
                         </h2>
@@ -163,6 +163,8 @@
                     </div>
 
                 </div>
+
+                <?php echo get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
                 
                 <div class="row justify-content-center position-relative">
 
@@ -184,7 +186,7 @@
 
                     </div>
 
-                    <img src="<?= get_template_directory_uri().'/assets/images/contact-form-bg.webp' ?>" alt="Fabris Corp Properties" class="z-1 px-0 w-100 h-100 position-absolute top-0 start-0" style="object-fit:cover;">
+                    <img src="<?= get_template_directory_uri()?>/assets/images/air-view-beach.webp" alt="Fabris Corp Properties" class="z-1 px-0 w-100 h-100 position-absolute top-0 start-0" style="object-fit:cover;">
 
                     <div class="fondo-oscuro"></div>
 
