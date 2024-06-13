@@ -106,6 +106,30 @@ function get_property_type($postID, $taxonomy){
 	return false;
 }
 
+function get_all_zones(){
+	$args = array(
+        'post_type' => 'listings',
+        'post_status' => 'publish',
+        'numberposts' => -1, // Obtener todos los posts
+        'meta_key' => 'community',
+        'fields' => 'ids', // Solo obtener los IDs de los posts
+    );
+
+    $listing_posts = get_posts($args);
+    $community_values = ['Puerto Vallarta', 'Riviera Nayarit'];
+
+    if (!empty($listing_posts)) {
+        foreach ($listing_posts as $post_id) {
+            $community_value = get_post_meta($post_id, 'community', true);
+            if (!empty($community_value) && !in_array($community_value, $community_values)) {
+                $community_values[] = $community_value;
+            }
+        }
+    }
+
+	return $community_values;
+}
+
 
 //variables que conozco
 /* 
@@ -305,6 +329,12 @@ add_action( '4am_cron_job', 'fabris_update_listings_auto' );
 
 // Define la función que se ejecutará
 function fabris_update_listings_auto() {
+
+	// Verificar si estamos en el área de administración
+    if ( !function_exists( 'post_exists' ) ) {
+        require_once( ABSPATH . 'wp-admin/includes/post.php' );
+    }
+
     $config = new \PHRETS\Configuration;
     $config->setLoginUrl('http://retsgw.flexmls.com/rets2_3/Login')
             ->setUsername('pvr.rets.fabriscorp')
@@ -360,6 +390,7 @@ function fabris_update_listings_auto() {
 						'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
 						'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
 						'directions'    => $listing['LIST_82'],
+						'last_mls_update'    => $listing['LIST_87'],
 					)
 				);
 
@@ -382,6 +413,7 @@ function fabris_update_listings_auto() {
 						'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
 						'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
 						'directions'    => $listing['LIST_82'],
+						'last_mls_update'    => $listing['LIST_87'],
 					)
 				);
 
@@ -412,6 +444,7 @@ function fabris_update_listings_auto() {
 						'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
 						'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
 						'directions'    => $listing['LIST_82'],
+						'last_mls_update'    => $listing['LIST_87'],
 					)
 				);
 

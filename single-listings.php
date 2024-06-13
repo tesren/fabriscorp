@@ -145,7 +145,7 @@
                     </div>
 
                     <!-- Ubicación -->
-                    <div class="col-12 mb-6">
+                    <div class="col-12 mb-5">
                         <h4 class="fs-4 text-yellow text-uppercase fw-normal mb-1"><?php pll_e('Ubicación') ?></h4>
                         <p><?= rwmb_meta('directions') ?></p>
                         <hr class="col-12 col-lg-3 mt-0">
@@ -164,7 +164,31 @@
 
                 </div>
 
-                <?php echo get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
+                <!-- Disclaimers -->
+                <div class="container text-dark my-4">
+
+                    <?php echo  get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
+
+                    <div class="d-flex">
+                        <img src="<?php echo get_template_directory_uri()?>/assets/images/mls-vallarta-nayarit.jpg" alt="MLS Vallarta Nayarit">
+                        <div class="fw-light ms-2">
+                            <?php
+                                // String que queremos convertir
+                                $string_fecha = rwmb_meta('last_mls_update');
+
+                                // Crear un objeto DateTime con el string de fecha
+                                $fecha_hora = new DateTime($string_fecha);
+
+                                // Formatear la fecha y hora según el formato deseado
+                                $fecha_hora_formateada = $fecha_hora->format('Y-m-d H:i:s');
+                            
+                                pll_e('Toda la información se considera confiable, pero no garantizada. Los listados en este sitio se muestran por cortesía del programa IDX de AMPI Vallarta Nayarit MLS y pueden no ser listados del propietario del sitio. Datos actualizados por última vez: ');
+                                echo $fecha_hora_formateada;
+                            ?>
+                        </div>
+                    </div>
+                </div>
+
                 
                 <div class="row justify-content-center position-relative">
 

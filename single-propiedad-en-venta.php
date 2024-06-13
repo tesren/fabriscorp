@@ -134,23 +134,21 @@
                             <?= rwmb_meta('description'); ?>
                         </div>
 
-                        <?php $amenities = rwmb_meta('amenities');?>
+                        <?php $amenities = rwmb_the_value('amenities_new', [], get_the_ID(), false);?>
 
                         <!-- Amenidades -->
                         <?php if($amenities): ?>
                             <h3 class="fs-4 text-yellow text-uppercase fw-normal"><?php pll_e('Amenidades');?></h3>
                             <hr class="col-12 col-lg-3 mt-0">
-                            <ul class="fs-6 fw-light">
-                                <?php foreach($amenities as $key => $amenity):?>
-                                    <li><?= $amenity ?></li>
-                                <?php endforeach;?>
-                            </ul>
+                            <div class="fw-light">
+                                <?php  rwmb_the_value('amenities_new'); ?>
+                            </div>
                         <?php endif; ?>
                     </div>
 
                     <!-- Ubicación -->
                     <div class="col-12 mb-6">
-                        <h4 class="fs-4 text-yellow text-uppercase fw-normal">Ubicación</h4>
+                        <h4 class="fs-4 text-yellow text-uppercase fw-normal"><?php pll_e('Ubicación');?></h4>
                         <hr class="col-12 col-lg-3 mt-0">
                         <div>
                             <?php

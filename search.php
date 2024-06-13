@@ -40,8 +40,8 @@
             'taxonomy' => 'regiones',
             'field' => 'name',
             'include_children' => true,
-            'operator' => 'LIKE',
-            'value' => $zone,
+            'operator' => 'IN',
+            'terms' => $zone,
         ];
 
     }else{
@@ -56,7 +56,7 @@
             'field' => 'name',
             'include_children' => true,
             'operator' => '!=',
-            'value' => 'Marte'
+            'terms' => 'Marte'
         ];
     }
 
@@ -360,7 +360,7 @@
     <?php else: ?>
 
         <div class="text-center my-5">
-            <h1 class="fs-1 blue-text"><?php pll_e('Lo sentimos, no hay resultados'); ?></h1>
+            <h1 class="fs-1 text-danger"><?php pll_e('Lo sentimos, no hay resultados'); ?></h1>
             <h2 class="fs-4 fw-light gold-text"><?php pll_e('Pero estas propiedades podrían interesarte'); ?></h2>
         </div>
 
@@ -420,7 +420,7 @@
                             <div class="fs-7 text-secondary fw-light"><?php rwmb_the_value('property_type', [], $listing->ID); ?></div>
                             <h2 class="fs-5 text-uppercase fw-bold mb-1 text-yellow"><?= get_the_title($listing->ID) ?></h2>
                             <p class="fw-light mb-1">
-                                <i class="fa-solid text-yellow fa-location-dot"></i> <?= $listing->city ?>, <?= $listing->state ?>
+                                <i class="fa-solid text-yellow fa-location-dot"></i><?= $listing->community ?>, <?= $listing->city ?>, <?= $listing->state ?>
                             </p>
 
                             <div class="d-flex fs-6 fw-light">

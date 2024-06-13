@@ -1,8 +1,33 @@
-<?php get_header(); ?>
+<?php 
+    //listings de flex
+    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+    $args = array(
+        'post_type' => 'propiedad-en-venta',
+        'posts_per_page' => 12,
+        'paged' => $paged,
+        'meta_query' => array(
+            array(
+                'key' => 'avaliable',
+                'value' => 'Vendido',
+                'compare' => '!='
+            ),
+        ),
+      );
+
+    $query = new WP_Query($args);
+
+    $temp_query = $wp_query;
+    $wp_query = NULL;
+    $wp_query = $query;
+    
+    get_header(); 
+
+?>
 
     <section>
 
-        <?php if ( have_posts() ): ?>
+        <?php if ($query ->  have_posts() ): ?>
 
             <section class="py-5 mb-6" style="background-image:url('<?= get_template_directory_uri().'/assets/images/properties-bg.webp' ?>'); background-position:center;">
                 <h1 class="text-center text-white my-5 fs-0 text-uppercase"><?php pll_e('Propiedades de lujo') ?></h1>
@@ -14,7 +39,7 @@
 
             <div class="container row justify-content-center mb-6">
 
-                <?php while( have_posts() ): the_post();?>
+                <?php while( $query -> have_posts() ): $query -> the_post();?>
 
                     <a href="<?= get_the_permalink() ?>" class="col-12 col-lg-4 position-relative mb-3 link-dark text-decoration-none">
 
@@ -71,15 +96,15 @@
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if( isset($listing->construction) ): ?>
+                                <?php if( rwmb_meta('construction') ): ?>
                                     <div class="me-3">
-                                    <i class="fa-solid fa-house"></i> <?= $listing->construction ?>m²
+                                    <i class="fa-solid fa-house"></i> <?= rwmb_meta('construction') ?>m²
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if( isset($listing->lot_area) ): ?>
+                                <?php if( rwmb_meta('lot_area') ): ?>
                                     <div class="me-3">
-                                    <i class="fa-solid fa-maximize"></i> <?= $listing->lot_area ?>m²
+                                    <i class="fa-solid fa-maximize"></i> <?= rwmb_meta('lot_area') ?>m²
                                     </div>
                                 <?php endif; ?>
 
@@ -99,9 +124,19 @@
                 'prev_text' => '<<',
                 'next_text' => '>>',
             ) ); ?>
+
+            <?php echo  get_template_part( 'partials/content', 'mls-disclaimer' ); ?>
+
             
         <?php endif; ?>
 
     </section>
+
+    <?php
+        wp_reset_postdata(); 
+        // Reset main query object
+        $wp_query = NULL;
+        $wp_query = $temp_query;
+    ?>
 
 <?php get_footer(); ?>

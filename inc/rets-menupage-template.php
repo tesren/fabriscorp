@@ -49,6 +49,7 @@
                             'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
                             'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
                             'directions'    => $listing['LIST_82'],
+						    'last_mls_update'    => $listing['LIST_87'],
                         )
                     );
 
@@ -78,6 +79,7 @@
                             'map'           => $listing['LIST_46'] . ',' . $listing['LIST_47'] . ',14',
                             'amenities'     => $listing['GF20101117190905087047000000'] ?? '0',
                             'directions'    => $listing['LIST_82'],
+						    'last_mls_update'    => $listing['LIST_87'],
                         )
                     );
 
@@ -95,7 +97,7 @@
         $listings = get_posts([
             'post_type' => 'listings',
             'numberposts' => -1,
-            'lang' => 'es'
+            'lang' => 'es',
         ]);
     
 
@@ -135,6 +137,7 @@
                         'map'           => $listing->map,
                         'amenities'     => $listing->amenities,
                         'directions'    => $listing->directions,
+                        'last_mls_update'=> $listing->last_mls_update,
                     )
                 );
     
