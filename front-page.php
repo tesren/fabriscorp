@@ -2,14 +2,17 @@
     
   $listings = get_posts(array(
     'post_type' => 'propiedad-en-venta',
-    'numberposts' => -1,
-    'meta_query' => array(
+    'numberposts' => 12,
+    'order'          => 'ASC',
+    'meta_key'       => 'priority',
+    'orderby'        => 'meta_value_num',
+    /* 'meta_query' => array(
         array(
             'key' => 'avaliable',
             'value' => 'Vendido',
             'compare' => '!='
         ),
-    ),
+    ), */
   ));
   
 
@@ -38,11 +41,26 @@
               <div class="position-absolute top-0 start-0 mt-2 ms-4">
                 <div class="position-relative">
 
-                  <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($listing->price) ?></div>
+                  <?php 
+                    if( isset($listing->price) and $listing->price != 0 ){
+                      $price = (double) $listing->price;
+                      $currency = 'MXN';
+                    }elseif( isset($listing->price_usd) and $listing->price_usd != 0 ){
+                      $price = (double) $listing->price_usd;
+                      $currency = 'USD';
+                    }else{
+                      $price = false;
+                    }
+                  ?>
 
-                  <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
-                    MXN
-                  </div>
+                  <?php if( $price ): ?>
+                    <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($price, 2) ?></div>
+
+                    <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                      <?= $currency ?>
+                    </div>
+
+                  <?php endif; ?>
 
                 </div>
               </div>

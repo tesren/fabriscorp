@@ -1,0 +1,35 @@
+<wpml-config>
+    <custom-fields>
+        <!--Listings-->
+        <custom-field action="copy">price</custom-field>
+        <custom-field action="copy">price_month</custom-field>
+        <custom-field action="copy">bedrooms</custom-field>
+        <custom-field action="copy">bathrooms</custom-field>
+        <custom-field action="copy">half_baths</custom-field>
+        <custom-field action="copy">currency</custom-field>
+        <custom-field action="copy">status</custom-field>
+        <custom-field action="copy">furniture</custom-field>
+        <custom-field action="copy">construction</custom-field>
+        <custom-field action="copy">lot_area</custom-field>
+        <custom-field action="copy">view</custom-field>
+        <custom-field action="copy">featured_listing</custom-field>
+        <custom-field action="copy">listing_gallery</custom-field>
+        <custom-field action="copy">map</custom-field>
+        <custom-field action="copy">price_usd</custom-field>
+        <custom-field action="copy">priority</custom-field>
+        <custom-field action="copy">amenities_new</custom-field>
+        <custom-field action="copy">amenities_new</custom-field>
+        <custom-field action="copy">avaliable</custom-field>
+        
+        <!--Desarrollos-->
+        <custom-field action="copy">gallery</custom-field>
+        <custom-field action="copy">development_map</custom-field>
+        <custom-field action="copy">address</custom-field>
+        <custom-field action="copy">gallery</custom-field>
+        <!--Sales team-->
+        <custom-field action="copy">agent_position</custom-field>
+        <custom-field action="copy">agent_email</custom-field>
+        <custom-field action="copy">agent_phone</custom-field>
+
+    </custom-fields>
+</wpml-config>

@@ -134,15 +134,18 @@
                             <?= rwmb_meta('description'); ?>
                         </div>
 
-                        <?php $amenities = rwmb_the_value('amenities_new', [], get_the_ID(), false);?>
+                        <?php $amenities = rwmb_meta('amenities_new');?>
 
                         <!-- Amenidades -->
                         <?php if($amenities): ?>
                             <h3 class="fs-4 text-yellow text-uppercase fw-normal"><?php pll_e('Amenidades');?></h3>
                             <hr class="col-12 col-lg-3 mt-0">
-                            <div class="fw-light">
-                                <?php  rwmb_the_value('amenities_new'); ?>
-                            </div>
+                            
+                            <ul class="fw-light">
+                                <?php foreach($amenities as $amt): ?>
+                                    <li><?php pll_e($amt) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
                         <?php endif; ?>
                     </div>
 

@@ -46,7 +46,8 @@
 
         <div class="col-12 col-lg-4">
             <?php 
-                $lang = 'es';
+                $lang = pll_current_language();
+                
                 if( $lang == 'es'){
                     echo do_shortcode( '[cf7form cf7key="formulario-footer"]' );
                 }

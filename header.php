@@ -24,7 +24,7 @@
       <title>Fabris Corp - <?php pll_e('Búsqueda de propiedades') ?></title>
       <meta name="description" content="<?php pll_e('Propiedades de lujo en venta que se encuentran diferentes partes de la República Mexicana, tales como Nuevo Vallarta y Riviera Nayarit.');?>">
     <?php else: ?>
-      <title>Fabris Corp - <?php echo the_title(); ?></title>
+      <title>Fabris Corp - <?php echo get_the_title(); ?></title>
       <meta name="description" content="<?php echo get_the_excerpt(); ?>">
 	  <?php endif; ?>
 
@@ -48,6 +48,16 @@
 
     <link rel="preload" href="<?php echo get_template_directory_uri() ?>/assets/css/fabris-styles-v1.css" as="style">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri() ?>/assets/css/fabris-styles-v1.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED7CHZH96W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ED7CHZH96W');
+    </script>
 
     <?php wp_head(); ?>
 </head>

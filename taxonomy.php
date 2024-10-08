@@ -55,7 +55,29 @@
                                             </div>
 
                                             <div class="fs-2 fw-bold blue-text">
-                                                $<?= number_format(rwmb_meta('price')) ?> <span class="fs-5"><?= rwmb_meta('currency') ?></span>
+                                                <?php 
+                                                    $price_mxn = rwmb_meta('price');
+                                                    $price_usd = rwmb_meta('price_usd');
+                                                    
+                                                    if( isset($price_mxn) and $price_mxn != 0 ){
+                                                        $price = (double) $price_mxn;
+                                                        $currency = 'MXN';
+                                                    }elseif( isset($price_usd) and $price_usd != 0 ){
+                                                        $price = (double) $price_usd;
+                                                        $currency = 'USD';
+                                                    }else{
+                                                        $price = false;
+                                                    }
+                                                ?>
+
+                                                <?php if( $price ): ?>
+                                                    <div class="position-relative z-3 bg-white rounded-pill shadow-4 px-3 py-1">$<?= number_format($price, 2) ?></div>
+
+                                                    <div class="position-absolute rounded-pill bg-yellow py-1 ps-5 pe-3 z-2 top-0" style="right:-60px;">
+                                                    <?= $currency ?>
+                                                    </div>
+
+                                                <?php endif; ?>
                                             </div>
 
                                             <p class="card-text"><small class="text-body-secondary">Última actualización: <?= get_the_date('d/m/Y');?></small></p>
